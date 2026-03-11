@@ -1,4 +1,4 @@
-from fastapi import FastAPI, status, HTTPExceptions, Depends 
+from fastapi import FastAPI, status, HTTPException, Depends 
 from pydantic import BaseModel 
 import asyncio
 from pydantic import BaseModel, Field 
@@ -50,23 +50,62 @@ def verificar_Peticion(credenciales: HTTPBasicCredentials = Depends(security)):
      passAuth = secrets.compare_digest(credenciales.password, "4321")
     
      if not(userAuth and passAuth):
-      raise HTTPExceptions(
+      raise HTTPException(
           status_code=status.HTTP_401_UNAUTHORIZED,
           detail="credenciales no autorizadas"
      )
 
      return credenciales.username
 
-#endpoint para confirmar que sirve 
+#endpoint para confirmar que sirve mi api 
+
+@app.get("/", tags=["Inicio"])
+async def bienvenido():
+    return{"Mensaje": "Bienvenido al sisitema de tickets de soporte tecnico "}
+
+#consulta ticket 
+@app.get("/v1/ticket/{id}", tags=["Parametro obligatorio"])
+async def consultaT(id: int):
+    return{"Se encontro el ticket": id}
+
+#crear ticket
+@app.post("/v1/ticket/", tags=["CRUD"])
+async def crear_ticket(ticket: ticket_create):
+
+    for tckt in ticket:
+        if tckt["id"] == ticket.id:
+
+            raise HTTPException(
+                status_code=400,
+                detail="El id de este ticket ya existe"
+            )
+    ticket.append(ticket.dict())
+    return{
+        "mensaje": "ticket agregado",
+        "ticket": ticket 
+    }
+#actualizar endpoint
+
+@app.put("/v1/ticket/{id}", tags=["CRUD"])
+async def actualizar_ticket(id: int, estado: dict, prioridad: dict):
+
+    
+    ticket["id"] = id
+    
+    for i in range(len(ticket)):
+
+        if ticket[i]["id"] == id:
+
+            ticket[i] = ticket 
+
+            return {
+                "mensaje": "ticket actualizado",
+                "ticket": ticket
+            }
+    
 
 
 
-@app.get("/v1/ticket/", tags=["CRUD HTTP"])
-async def leer_ticket():
-     
 
 
-@app.post("/v1/ticket/", tags=["CRUD HTTP"])
-async def crear_ticket(ticket: ticket_create): 
-     for tk in ticket :
-          if tk["id"] == 
+
