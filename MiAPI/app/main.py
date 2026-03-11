@@ -1,10 +1,4 @@
-# -----------------------------
-# IMPORTACIONES
-# -----------------------------
-# FastAPI: framework para crear APIs en Python
-# status: permite usar códigos HTTP estándar (200, 404, etc.)
-# HTTPException: sirve para lanzar errores HTTP personalizados
-# Depends: permite usar dependencias como autenticación
+
 
 from fastapi import FastAPI, status, HTTPException, Depends
 
@@ -25,10 +19,7 @@ import secrets
 
 
 
-# INSTANCIA DEL SERVIDOR
 
-# Aquí se crea la aplicación de FastAPI.
-# Estos datos aparecerán en la documentación automática (/docs).
 
 app = FastAPI(
     title="Mi primer API",
@@ -38,10 +29,7 @@ app = FastAPI(
 
 
 
-# BASE DE DATOS FICTICIA
 
-# Esta es una lista de usuarios simulando una base de datos.
-# En proyectos reales se conectaría a MySQL, PostgreSQL, MongoDB, etc.
 
 usuarios = [
     {"id": 1, "nombre": "Juan", "edad": 21},
@@ -52,10 +40,7 @@ usuarios = [
 ]
 
 
-# MODELO DE VALIDACIÓN
-
-# Este modelo define cómo debe ser un usuario al crearse.
-# FastAPI validará automáticamente los datos que lleguen en el body.
+#
 
 class usuario_create(BaseModel):
 
@@ -72,7 +57,6 @@ class usuario_create(BaseModel):
 
 # SEGURIDAD HTTP BASIC
 
-# Se crea un sistema de autenticación simple.
 
 security = HTTPBasic()
 
@@ -114,19 +98,14 @@ async def Hola():
     return {"Mensaje": "Bienvenido a mi API"}
 
 
-# Endpoint con parámetro obligatorio
-# El ID se pasa en la URL
-# ejemplo: /v1/usuario/3
+
 @app.get("/v1/usuario/{id}", tags=["Parametro Obligatorio"])
 async def consultaUno(id: int):
 
     return {"Se encontro usuario": id}
 
 
-# Endpoint con parámetro opcional
-# Se pasa como query parameter
-# ejemplo:
-# /v1/usuarios/buscar?id=3
+#
 
 @app.get("/v1/usuarios/buscar", tags=["Parametro Opcional"])
 async def consultaTodos(id: Optional[int] = None):
